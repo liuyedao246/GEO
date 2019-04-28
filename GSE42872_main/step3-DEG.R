@@ -36,7 +36,7 @@ bp(dat[3,])
 bp(dat[4,])
 dim(dat)
 
-library(limma)
+  library(limma)
 design=model.matrix(~factor( group_list ))
 fit=lmFit(dat,design)
 fit=eBayes(fit)
@@ -145,7 +145,6 @@ if(T){
 }
 
 write.csv(deg,file = 'deg.csv')
-
-
-
+  
+    
 

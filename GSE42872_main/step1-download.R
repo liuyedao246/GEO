@@ -23,13 +23,14 @@ library(GEOquery)
 #Setting options('GEOquery.inmemory.gpl'=FALSE)
 if(!file.exists(f)){
   gset <- getGEO('GSE42872', destdir=".",
-                 AnnotGPL = F,     ## 注释文件
-                 getGPL = F)       ## 平台文件
+                 AnnotGPL = T,     ## 注释文件
+                 getGPL = T)       ## 平台文件
   save(gset,file=f)   ## 保存到本地
 }
 load('GSE42872_eSet.Rdata')  ## 载入数据
 class(gset)  #查看数据类型
-length(gset)  #
+length(gset) 
+str(gset)#
 class(gset[[1]])
 gset
 # assayData:  33297 features, 6 samples
@@ -40,7 +41,7 @@ dat=exprs(a) #a现在是一个对象，取a这个对象通过看说明书知道�
 dim(dat)#看一下dat这个矩阵的维度
 # GPL6244
 dat[1:4,1:4] #查看dat这个矩阵的1至4行和1至4列，逗号前为行，逗号后为列
-boxplot(dat,las=2)
+boxplot(dat,las=1)
 pd=pData(a) #通过查看说明书知道取对象a里的临床信息用pData
 ## 挑选一些感兴趣的临床表型。
 library(stringr)
@@ -56,21 +57,21 @@ if(F){
   #Download GPL file, put it in the current directory, and load it:
   gpl <- getGEO('GPL6244', destdir=".")
   colnames(Table(gpl))  
-  head(Table(gpl)[,c(1,15)]) ## you need to check this , which column do you need
-  probe2gene=Table(gpl)[,c(1,15)]
+  head(Table(gpl) [,c(1,12)])## you need to check this , which column do you need
+  probe2gene=Table(gpl)[,c(1,12)]
   head(probe2gene)
   library(stringr)  
   save(probe2gene,file='probe2gene.Rdata')
 }
-# 
-# load(file='probe2gene.Rdata')
+
+  # 
+# load(file='probe2gene.Rdata')   
 # ids=probe2gene 
 
 library(hugene10sttranscriptcluster.db)
 ids=toTable(hugene10sttranscriptclusterSYMBOL) #toTable这个函数：通过看hgu133plus2.db这个包的说明书知道提取probe_id（探针名）和symbol（基因名）的对应关系的表达矩阵的函数为toTable
 head(ids) #head为查看前六行
 
-head(ids)
 colnames(ids)=c('probe_id','symbol')  
 ids=ids[ids$symbol != '',]
 ids=ids[ids$probe_id %in%  rownames(dat),]
@@ -87,7 +88,7 @@ dat[1:4,1:4]  #保留每个基因ID第一次出现的信息
 
 
 save(dat,group_list,file = 'step1-output.Rdata')
-
+          
 
 
  

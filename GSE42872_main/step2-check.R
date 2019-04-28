@@ -27,6 +27,7 @@ library("factoextra")
 # The variable group_list (index = 54676) is removed
 # before PCA analysis
 dat.pca <- PCA(dat[,-ncol(dat)], graph = FALSE)#现在dat最后一列是group_list，需要重新赋值给一个dat.pca,这个矩阵是不含有分组信息的
+
 fviz_pca_ind(dat.pca,
              geom.ind = "point", # show points only (nbut not "text")
              col.ind = dat$group_list, # color by groups
@@ -40,7 +41,7 @@ ggsave('all_samples_PCA.png')
 
 
 rm(list = ls())  ## 魔幻操作，一键清空~
-load(file = 'step1-output.Rdata') #此步为一个小插曲，即计算一下从第一行开是计算每一行的sd值，知道最后一行所需要的时间
+load(file = 'step1-output.Rdata') #此步为一个小插曲，即计算一下从第一行开是计算每一行的sd值，直到最后一行所需要的时间
 dat[1:4,1:4] 
 
 cg=names(tail(sort(apply(dat,1,sd)),1000))#apply按行（'1'是按行取，'2'是按列取）取每一行的方差，从小到大排序，取最大的1000个
@@ -55,8 +56,8 @@ ac=data.frame(g=group_list)
 rownames(ac)=colnames(n) #把ac的行名给到n的列名，即对每一个探针标记上分组信息
 
 pheatmap(n,show_colnames =F,show_rownames = F,
-         annotation_col=ac,filename = 'heatmap_top1000_sd.png')
-
+         annotation_col=ac,filename = 'heatmap_top1000_sd.pdf')
+  
 
 
 
